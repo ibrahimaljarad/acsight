@@ -21,7 +21,7 @@ import {
   CardBody,
 } from "reactstrap";
 
-function AddEmailTemplate(props) {
+function AddSMS(props) {
   const ProviderID = [
     {
       value: 1,
@@ -206,4 +206,4 @@ function AddEmailTemplate(props) {
   );
 }
 
-export default AddEmailTemplate;
+export default AddSMS;
