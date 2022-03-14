@@ -14,6 +14,7 @@ import {
   CardBody,
 } from "reactstrap";
 import Select from "react-select";
+import { getAllData, login } from "../store/actions";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
@@ -21,15 +22,37 @@ import axios from "axios";
 
 const EditSms = (props) => {
   const dispatch = useDispatch();
+  const store = useSelector((state) => state.smsReducer);
   const { id } = useParams();
+
   const ProviderID = [
     {
       value: 1,
-      label: "User",
+      label: "PostaGuvercini",
     },
     {
-      value: 0,
-      label: "Group",
+      value: 2,
+      label: "MobilDev",
+    },
+    {
+      value: 3,
+      label: "JetSMS",
+    },
+    {
+      value: 4,
+      label: "MailJet",
+    },
+    {
+      value: 5,
+      label: "Twilio",
+    },
+    {
+      value: 6,
+      label: "InfoBip",
+    },
+    {
+      value: 7,
+      label: "Vonage",
     },
   ];
   const Status = [
@@ -42,6 +65,7 @@ const EditSms = (props) => {
       label: "false",
     },
   ];
+
   const [formState, setFormState] = useState({
     ID: 0,
     ProviderID: null,
@@ -51,7 +75,28 @@ const EditSms = (props) => {
     Username: "",
     Password: " ",
     Status: false,
+    paramID: id,
   });
+  const [defaultData, SetDefultData] = useState({});
+  const [passwordShown, setPasswordShown] = useState(false);
+
+  useEffect(() => {
+    login();
+    dispatch(getAllData());
+    SetDefultData(result);
+  }, []);
+
+  if (store.allData.length > 0) {
+    var result = store.allData.find((obj) => {
+      return obj.id == formState.paramID;
+    });
+
+    console.log("state", result);
+  } else if (store.allData.length === 0) {
+    return [];
+  } else {
+    return store.allData.slice(0);
+  }
 
   const toggleStatus = () => {
     axios
@@ -105,6 +150,7 @@ const EditSms = (props) => {
                       type="text"
                       name="BaseURL"
                       id="BaseURL"
+                      defaultValue={defaultData.baseURL}
                       placeholder="BaseURL..."
                       onChange={(e) =>
                         setFormState({
@@ -123,6 +169,7 @@ const EditSms = (props) => {
                       type="text"
                       name="FromName"
                       id="FromName"
+                      defaultValue={defaultData.fromName}
                       placeholder="FromName..."
                       onChange={(e) =>
                         setFormState({
@@ -143,6 +190,7 @@ const EditSms = (props) => {
                       <Input
                         type="text"
                         autoFocus
+                        defaultValue={defaultData.username}
                         name="Username"
                         id="Username"
                         placeholder="Username..."
@@ -164,7 +212,8 @@ const EditSms = (props) => {
                         <span className="text-danger">*</span>
                       </Label>
                       <Input
-                        type="text"
+                        type={passwordShown ? "text" : "password"}
+                        defaultValue={defaultData.password}
                         autoFocus
                         name="Password"
                         id="Password"
@@ -183,9 +232,13 @@ const EditSms = (props) => {
                   <CardBody className="p-0">
                     <FormGroup>
                       <Label for="List Type">
-                        provider id : <span className="text-danger">*</span>
+                        provider Name : <span className="text-danger">*</span>
                       </Label>
                       <Select
+                        // value={ProviderID}
+                        value={ProviderID.filter(
+                          (option) => option.value == id
+                        )}
                         required
                         className="react-select"
                         classNamePrefix="select"
@@ -209,6 +262,7 @@ const EditSms = (props) => {
                         Status : <span className="text-danger">*</span>
                       </Label>
                       <Select
+                        value={Status}
                         required
                         className="react-select"
                         classNamePrefix="select"

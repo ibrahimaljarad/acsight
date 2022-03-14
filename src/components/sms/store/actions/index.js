@@ -50,3 +50,21 @@ export const getAllData = (params) => {
       });
   };
 };
+
+// export const toggleStatus = (id) => {
+//   return async (dispatch) => {
+//     await axios
+//       .post(
+//         `http://c4f2.acsight.com:7770/api/system/change-stat-partner-sms-provider?id=${id}`
+//       )
+//       .then((response) => {
+//         console.log("tog", response);
+//         // dispatch({
+//         //   type: "TOGGLE_STATUS",
+//         //   allData: response.data.data.partnerProviders,
+
+//         //   params,
+//         // });
+//       });
+//   };
+// };

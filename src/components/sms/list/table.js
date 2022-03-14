@@ -19,9 +19,10 @@ import {
   Button,
 } from "reactstrap";
 
-const DataTableServerSide = () => {
+const DataTableServerSide = (props) => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state.smsReducer);
+  console.log("store.", store);
 
   const [tableState, setFormState] = useState({
     renderId: 1,

@@ -42,6 +42,7 @@ function AddSMS(props) {
     Username: "",
     Password: " ",
   });
+  const [passwordShown, setPasswordShown] = useState(false);
 
   const dispatch = useDispatch();
   const store = useSelector((state) => state.users);
@@ -149,7 +150,7 @@ function AddSMS(props) {
                     <span className="text-danger">*</span>
                   </Label>
                   <Input
-                    type="text"
+                    type={passwordShown ? "text" : "password"}
                     autoFocus
                     name="Password"
                     id="Password"

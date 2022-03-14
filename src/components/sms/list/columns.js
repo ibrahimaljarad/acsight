@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { Button } from "reactstrap";
 
 import {
   UncontrolledDropdown,
@@ -28,6 +30,27 @@ export const Columns = [
     sortable: true,
     minWidth: "150px",
     selector: (row) => row.username,
+  },
+  {
+    name: "Provider Name",
+    sortable: true,
+    minWidth: "150px",
+    selector: (row) =>
+      row.providerID === 1
+        ? "PostaGuvercini"
+        : row.providerID === 2
+        ? "MobilDev"
+        : row.providerID === 3
+        ? "JetSMS"
+        : row.providerID === 4
+        ? "MailJet"
+        : row.providerID === 5
+        ? "Twilio"
+        : row.providerID === 6
+        ? "InfoBip"
+        : row.providerID === 7
+        ? "Vonage"
+        : "",
   },
   {
     name: "From",
@@ -65,17 +88,36 @@ export const Columns = [
     minWidth: "150px",
     selector: (row) => row.authToken,
   },
+
   {
     name: "Status",
     sortable: true,
     minWidth: "150px",
-    selector: (row) =>
-      row.status === true ? <span>Active</span> : <span>not active</span>,
+    selector: (row) => (
+      <Button
+        className="mr-1"
+        color="primary"
+        type="button"
+        onClick={() =>
+          axios
+            .post(
+              `http://c4f2.acsight.com:7770/api/system/change-stat-partner-sms-provider?id=${row.id}`
+            )
+            .then((response) => {
+              if (response.status === 200) {
+                console.log("yes", response);
+              }
+            })
+        }
+      >
+        <span>{row.status === true ? "active" : "inactive"}</span>
+      </Button>
+    ),
   },
   {
     name: "Options",
     minWidth: "50px",
-    selector: (row) => (
+    cell: (row) => (
       <UncontrolledDropdown>
         <DropdownToggle tag="div" className="btn btn-sm">
           <MoreVertical size={14} className="cursor-pointer" />
